@@ -1,0 +1,23 @@
+{
+  "runtime": "@huggingface/transformers@3.8.1",
+  "device": "wasm",
+  "dtype": "q8",
+  "models": [
+    {
+      "task": "feature-extraction / evidence selection",
+      "id": "Xenova/all-MiniLM-L6-v2",
+      "revision": "751bff37182d3f1213fa05d7196b954e230abad9"
+    },
+    {
+      "task": "question-answering / answer extraction",
+      "id": "Xenova/distilbert-base-cased-distilled-squad",
+      "revision": "bdbb0a5e9c617c3c7ea9f3cbaf2be3ad871bcd7d"
+    }
+  ],
+  "limitations": [
+    "Extractive, not free-form generation",
+    "Retrieval and answer-span scores are uncalibrated",
+    "Sources must be checked for relevance",
+    "No scientific evidence beyond synthetic study fixtures"
+  ]
+}

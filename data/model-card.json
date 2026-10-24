@@ -1,0 +1,197 @@
+{
+  "models": {
+    "sars": {
+      "id": "fairouz-synthetic-rf-sars-v2",
+      "key": "sars",
+      "virus": "SARS-CoV-2",
+      "target": "Main protease (Mpro)",
+      "algorithm": "Random forest regression",
+      "endpoint": "Synthetic pIC50",
+      "units": "-log10(mol/L), synthetic labels only",
+      "nTrain": 1680,
+      "nValidation": 360,
+      "nCandidates": 360,
+      "trees": 64,
+      "seed": 2302,
+      "rmse": 0.2468,
+      "mae": 0.1979,
+      "r2": 0.9158,
+      "baselineRmse": 0.8511,
+      "split": "Molecule-disjoint random split; not scaffold, temporal or external validation",
+      "dataType": "Entirely synthetic structures and generated activity labels; no measured antiviral data",
+      "uncertainty": "Standard deviation across trees, uncalibrated; not a confidence interval",
+      "trainingLabelRange": [
+        2.0,
+        9.835
+      ],
+      "featureImportance": [
+        {
+          "feature": "LogP",
+          "importance": 0.6982
+        },
+        {
+          "feature": "Polar surface area",
+          "importance": 0.1771
+        },
+        {
+          "feature": "H-bond acceptors",
+          "importance": 0.0459
+        },
+        {
+          "feature": "Molecular weight",
+          "importance": 0.0156
+        },
+        {
+          "feature": "H-bond donors",
+          "importance": 0.0069
+        },
+        {
+          "feature": "Aromatic rings",
+          "importance": 0.0049
+        },
+        {
+          "feature": "Fraction sp3",
+          "importance": 0.0045
+        },
+        {
+          "feature": "Morgan bit 77",
+          "importance": 0.0035
+        }
+      ],
+      "artifactSha256": "07cc3c0b87bbf15d33382378c64a7f5b5ddc5889a16dc901ec281ebc5de71ca6"
+    },
+    "flu": {
+      "id": "fairouz-synthetic-rf-flu-v2",
+      "key": "flu",
+      "virus": "Influenza A",
+      "target": "Neuraminidase",
+      "algorithm": "Random forest regression",
+      "endpoint": "Synthetic pIC50",
+      "units": "-log10(mol/L), synthetic labels only",
+      "nTrain": 1680,
+      "nValidation": 360,
+      "nCandidates": 360,
+      "trees": 64,
+      "seed": 2303,
+      "rmse": 0.2658,
+      "mae": 0.2169,
+      "r2": 0.9348,
+      "baselineRmse": 1.0442,
+      "split": "Molecule-disjoint random split; not scaffold, temporal or external validation",
+      "dataType": "Entirely synthetic structures and generated activity labels; no measured antiviral data",
+      "uncertainty": "Standard deviation across trees, uncalibrated; not a confidence interval",
+      "trainingLabelRange": [
+        2.707,
+        10.0
+      ],
+      "featureImportance": [
+        {
+          "feature": "Polar surface area",
+          "importance": 0.5648
+        },
+        {
+          "feature": "LogP",
+          "importance": 0.2191
+        },
+        {
+          "feature": "H-bond acceptors",
+          "importance": 0.0792
+        },
+        {
+          "feature": "H-bond donors",
+          "importance": 0.043
+        },
+        {
+          "feature": "Fraction sp3",
+          "importance": 0.0164
+        },
+        {
+          "feature": "Molecular weight",
+          "importance": 0.0099
+        },
+        {
+          "feature": "Morgan bit 107",
+          "importance": 0.008
+        },
+        {
+          "feature": "Morgan bit 81",
+          "importance": 0.0053
+        }
+      ],
+      "artifactSha256": "45467d6893a11b34fbf3ecad1ee63519667b337d6e5a4cc4bd1441733f8efbda"
+    },
+    "hcv": {
+      "id": "fairouz-synthetic-rf-hcv-v2",
+      "key": "hcv",
+      "virus": "Hepatitis C virus",
+      "target": "NS3/4A protease",
+      "algorithm": "Random forest regression",
+      "endpoint": "Synthetic pIC50",
+      "units": "-log10(mol/L), synthetic labels only",
+      "nTrain": 1680,
+      "nValidation": 360,
+      "nCandidates": 360,
+      "trees": 64,
+      "seed": 2304,
+      "rmse": 0.2812,
+      "mae": 0.2235,
+      "r2": 0.9488,
+      "baselineRmse": 1.2429,
+      "split": "Molecule-disjoint random split; not scaffold, temporal or external validation",
+      "dataType": "Entirely synthetic structures and generated activity labels; no measured antiviral data",
+      "uncertainty": "Standard deviation across trees, uncalibrated; not a confidence interval",
+      "trainingLabelRange": [
+        2.0,
+        8.719
+      ],
+      "featureImportance": [
+        {
+          "feature": "LogP",
+          "importance": 0.7914
+        },
+        {
+          "feature": "Polar surface area",
+          "importance": 0.1196
+        },
+        {
+          "feature": "H-bond acceptors",
+          "importance": 0.0241
+        },
+        {
+          "feature": "Molecular weight",
+          "importance": 0.0194
+        },
+        {
+          "feature": "Fraction sp3",
+          "importance": 0.0131
+        },
+        {
+          "feature": "Morgan bit 81",
+          "importance": 0.0033
+        },
+        {
+          "feature": "Morgan bit 122",
+          "importance": 0.0021
+        },
+        {
+          "feature": "H-bond donors",
+          "importance": 0.0021
+        }
+      ],
+      "artifactSha256": "54c941094c99dfda4f620bbf2bbcb0f5a2770118a97f1a1db9863b2b7f752355"
+    }
+  },
+  "versions": {
+    "rdkit": "2026.09.1",
+    "sklearn": "1.9.1"
+  },
+  "dataGeneration": "scripts/train_synthetic.py",
+  "datasetSha256": "3b88062e12e10f597c1159570c5b7cd632bcc2bbe3e087548b8cffa670a02045",
+  "limitations": [
+    "No real biological labels",
+    "No clinical or experimental validation",
+    "Validation describes recovery of an artificial response surface only",
+    "Uncalibrated tree disagreement",
+    "No target-sequence generalisation; only three synthetic contexts"
+  ]
+}
