@@ -1,15 +1,16 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+const dismissReveal=async page=>{const reveal=page.locator('#top3Results');if(await reveal.isVisible())await reveal.locator('[data-top3-close]').first().click()};
 const browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
 const study=JSON.parse(fs.readFileSync('dist/research-data.json','utf8'));
 const errors=[];
-const start=async page=>{page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:8765');await page.waitForFunction(()=>document.querySelector('#resultCount').textContent==='360');await page.locator('nav [data-view="library"]').click()};
+const start=async page=>{page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:8765');await page.waitForFunction(()=>document.querySelector('#resultCount').textContent==='360');await dismissReveal(page);await page.locator('nav [data-view="library"]').click()};
 const ready=async page=>{await page.waitForFunction(()=>['ready','error'].includes(document.querySelector('.molecule-panel')?.dataset.state),null,{timeout:60000});assert.equal(await page.locator('.molecule-panel').getAttribute('data-state'),'ready',await page.locator('#moleculeStatus').textContent())};
 try{
 const page=await browser.newPage({viewport:{width:1512,height:1100},acceptDownloads:true});const vendorRequests=[];
 page.on('request',r=>{if(r.url().includes('/vendor/'))vendorRequests.push(r.url())});
-page.setDefaultTimeout(20000);await start(page);console.log('Viewer loaded; testing interaction.');assert.equal(vendorRequests.length,0,'Molecular libraries must be lazy');
+page.setDefaultTimeout(20000);await start(page);console.log('Viewer loaded; testing interaction.');assert.ok(vendorRequests.every(url=>url.includes('/vendor/3dmol/')||url.includes('/vendor/openbabel/')),'Completed-screening previews use only the existing local molecular libraries');
 const ids=await page.locator('#compoundRows .compound-link').evaluateAll(xs=>xs.slice(0,3).map(x=>x.dataset.detail));
 await page.locator('#compoundRows [data-detail="'+ids[0]+'"]').click();await ready(page);
 

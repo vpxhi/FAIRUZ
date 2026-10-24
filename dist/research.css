@@ -510,3 +510,89 @@ body.compound-open .candidates .panel-heading .tag { display:none; }
   body.compound-open .candidates { transition:none; }
   .cursor-glow { display:none; }
 }
+
+/* Completed screening reveal. Its cards use the same chemistry/runtime as details. */
+body.top3-open { overflow:hidden; }
+#top3Results { width:min(1280px,calc(100vw - 48px)); max-width:none; max-height:calc(100dvh - 48px); padding:0; border:1px solid #4d7657; border-radius:20px; color:#eaf6ed; background:radial-gradient(ellipse at 50% 0,#23482d55,transparent 48%),#111c15; box-shadow:0 30px 120px #000a,0 0 65px #4ade800d; overflow:auto; overscroll-behavior:contain; animation:top3-open .28s ease-out; }
+#top3Results::backdrop { background:#020906bd; backdrop-filter:blur(7px); animation:top3-dim .25s ease-out; }
+.top3-heading { position:sticky; top:0; z-index:3; display:flex; justify-content:space-between; align-items:center; height:auto; min-height:0; gap:22px; padding:26px 30px 20px; background:#14231aec; border-bottom:1px solid #344e3b; backdrop-filter:blur(14px); }
+.top3-heading .eyebrow { font-size:8px; letter-spacing:1.8px; color:#a3c8ac; }
+.top3-heading h2 { font-size:30px; letter-spacing:-1px; margin:7px 0 0; }
+.top3-close { display:grid; place-items:center; flex-shrink:0; height:42px; width:42px; border:1px solid #4d7356; border-radius:10px; color:#d8efe0; background:#223c2b; font-size:26px; }
+.top3-close:hover { background:#31563b; border-color:#a0d0ac; }
+.top3-body { padding:18px 30px 0; }
+#top3Description { font-size:15px; margin:0 0 5px; color:#d5e7d8; line-height:1.8; }
+.top3-explanation { color:#a9c1af; font-size:12px; margin:0 0 16px; }
+.top3-notice { border:1px solid #416449; border-radius:9px; padding:11px 15px; background:#1c3223; font-size:11px; color:#b9d3bf; line-height:1.9; }
+.top3-notice strong { color:#e0f3e2; margin-right:7px; }
+.top3-context { font:10px/1.8 monospace; color:#a2bea9; margin:14px 0 18px; overflow-wrap:anywhere; }
+.top3-cards { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.top3-card { min-width:0; padding:19px; border:1px solid #385540; border-radius:14px; background:linear-gradient(160deg,#1b3022,#101d15); animation:top3-card-in .36s ease-out var(--reveal-delay) both; }
+.top3-card:first-child { border-color:#76b288; box-shadow:0 0 0 1px #94e5a90c,0 0 30px #62df8210; background:radial-gradient(ellipse at 0 0,#346a3e44,transparent 65%),#16291c; }
+.top3-card-heading { display:flex; gap:10px; align-items:center; color:#b4cfbb; font-size:11px; }
+.top3-rank { padding:5px 8px; background:#2d4c36; border:1px solid #4d7456; border-radius:7px; color:#d2efda; font:12px monospace; }
+.top3-card:first-child .top3-rank { color:#a8f3bf; border-color:#7fbd8e; }
+.top3-compound-name { font:600 24px/1.4 Manrope,sans-serif; letter-spacing:-.6px; color:#e2f5e8; margin:12px 0 7px; }
+.top3-molecule-stage { position:relative; height:255px; border-radius:12px; background:radial-gradient(ellipse at 50% 48%,#2a6d3b29,transparent 66%); }
+.top3-canvas { position:absolute; inset:0; touch-action:none; border-radius:10px; overflow:hidden; }
+.top3-molecule-stage:focus-within { outline:2px solid #8cdea4; outline-offset:3px; }
+.top3-molecule-status { position:absolute; inset:0; margin:0; padding:22px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:15px; color:#bad7c2; font-size:11px; line-height:1.9; text-align:center; background:#102016ce; border-radius:10px; pointer-events:none; }
+.top3-molecule[data-state=loading] .top3-molecule-status::before { content:''; width:23px; height:23px; border:2px solid #4a6d53; border-top-color:#a3eab6; border-radius:50%; animation:orbital-drift 1.2s linear infinite; }
+.top3-molecule[data-state=error] .top3-molecule-status { color:#ddcaad; padding-bottom:62px; }
+.top3-retry { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); min-height:34px; padding:7px 11px; font-size:10px; white-space:nowrap; }
+.top3-instructions { color:#a3bfa9; font-size:9px; text-align:center; margin:6px 0 10px; }
+.top3-view-controls { display:flex; flex-wrap:wrap; gap:6px; min-height:37px; margin:9px 0 18px; }
+.top3-view-controls button { min-height:37px; padding:7px 10px; font-size:10px; color:#c2e3ca; border:1px solid #40664a; background:#213d2a; border-radius:8px; }
+.top3-view-controls button[data-camera=spin] { margin-right:auto; }
+.top3-view-controls button:hover { background:#31553b; border-color:#8bbd97; }
+.top3-view-controls button[aria-pressed=true] { color:#b1f3c0; background:#2b4d34; }
+.top3-score { display:flex; justify-content:space-between; align-items:center; gap:10px; border-top:1px solid #36543e; padding-top:15px; }
+.top3-score span { display:block; color:#b4ceba; font-size:11px; }
+.top3-score strong { display:block; font:600 29px/1.4 Manrope,sans-serif; color:#a9e8bb; margin-top:5px; letter-spacing:-.5px; font-variant-numeric:tabular-nums; }
+.top3-score small { font-size:9px; line-height:1.9; color:#a9c3b0; text-align:right; }
+.top3-score-note { font-size:10px; line-height:1.9; color:#abc7b2; margin:9px 0; }
+.top3-uncertainty { font-size:9px; color:#a1bba9; line-height:1.9; margin-bottom:16px; }
+.top3-details { width:100%; justify-content:space-between; font-size:11px; }
+.top3-structure-note { color:#a4beab; font-size:10px; line-height:1.9; margin:17px 0 20px; }
+.top3-footer { position:sticky; bottom:0; z-index:3; background:#14231af5; backdrop-filter:blur(14px); border-top:1px solid #36523d; padding:17px 30px; display:flex; justify-content:space-between; align-items:center; gap:20px; }
+.top3-footer>span { font-size:11px; color:#a5c3ae; }
+.top3-footer>div { display:flex; gap:10px; }
+#viewTop3:not(:disabled) { color:#c2f3d0; border-color:#618d6d; background:#203e2b; }
+@keyframes top3-open { from { opacity:0; transform:translateY(12px) scale(.98); } to { opacity:1; transform:translateY(0) scale(1); } }
+@keyframes top3-card-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes top3-dim { from { background:#02090600; backdrop-filter:blur(0); } to { background:#020906bd; backdrop-filter:blur(7px); } }
+@media(max-width:1050px) {
+  #top3Results { width:calc(100vw - 32px); }
+  .top3-heading { padding:22px 23px 18px; }
+  .top3-body { padding:17px 23px 0; }
+  .top3-card { padding:15px; }
+  .top3-cards { gap:12px; }
+  .top3-molecule-stage { height:225px; }
+  .top3-footer { padding:15px 23px; }
+  .top3-footer>span { display:none; }
+  .top3-footer>div { margin-left:auto; }
+}
+@media(max-width:760px) {
+  #top3Results { width:calc(100vw - 20px); max-height:calc(100dvh - 20px); border-radius:15px; }
+  .top3-heading { padding:18px 17px 16px; gap:12px; }
+  .top3-heading h2 { font-size:24px; }
+  .top3-heading .eyebrow { font-size:7px; }
+  .top3-close { height:40px; width:40px; }
+  .top3-body { padding:16px 17px 0; }
+  #top3Description { font-size:13px; }
+  .top3-explanation { font-size:11px; }
+  .top3-notice { padding:11px 12px; font-size:10px; }
+  .top3-notice strong { display:block; }
+  .top3-cards { grid-template-columns:minmax(0,1fr); gap:16px; }
+  .top3-card { padding:18px; }
+  .top3-molecule-stage { height:280px; }
+  .top3-view-controls button { min-height:42px; font-size:11px; }
+  .top3-details { min-height:44px; }
+  .top3-score-note { font-size:11px; }
+  .top3-score small { font-size:10px; }
+  .top3-uncertainty { font-size:10px; }
+  .top3-footer { padding:13px 16px; }
+  .top3-footer .button { font-size:11px; padding:10px 13px; }
+  .top3-footer>div { width:100%; justify-content:space-between; }
+}
+@media(prefers-reduced-motion:reduce) { #top3Results,#top3Results::backdrop,.top3-card,.top3-molecule-status::before { animation:none!important; } }

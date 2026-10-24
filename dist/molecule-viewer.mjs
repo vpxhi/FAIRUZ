@@ -1,23 +1,13 @@
+import {loadMolecularRenderer as loadRenderer, requestConformer, renderMolecule, applyMoleculeStyle, molecularKey} from './molecular-runtime.mjs';
 /* One selected visualization only. No screening state, model outputs or exports are changed. */
 const dialog = document.querySelector('#detail');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const dockWidth = matchMedia('(min-width: 1250px)');
-let libraryPromise, viewer, canvas, rendererHost, panel, worker, timer, idleTimer, resizeObserver, visibilityObserver;
+let viewer, rendererHost, panel, idleTimer, resizeObserver, visibilityObserver;
 let returnFocus;
 let selection = 0, currentCompound, defaultView, inView = true, interacting = false, autoRotate = !reducedMotion.matches;
-const cache = new Map();
+let conformerAbort;
 const $ = selector => panel?.querySelector(selector);
-function loadRenderer() {
-  if (globalThis.$3Dmol) return Promise.resolve(globalThis.$3Dmol);
-  if (!libraryPromise) libraryPromise = new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = new URL('./vendor/3dmol/3Dmol-min.js', import.meta.url).href;
-    script.onload = () => resolve(globalThis.$3Dmol);
-    script.onerror = () => { script.remove(); libraryPromise = null; reject(new Error('The local 3D renderer could not load.')); };
-    document.head.append(script);
-  });
-  return libraryPromise;
-}
 function updateSpin() {
   if (!viewer) return;
   const spinning = panel?.dataset.state === 'ready' && autoRotate && !reducedMotion.matches && inView && !interacting && !document.hidden && dialog.open;
@@ -27,8 +17,8 @@ function updateSpin() {
 }
 function stopWork() {
   selection++;
-  clearTimeout(timer); clearTimeout(idleTimer);
-  worker?.terminate(); worker = null;
+  clearTimeout(idleTimer);
+  conformerAbort?.abort(); conformerAbort=null;
   resizeObserver?.disconnect(); visibilityObserver?.disconnect();
   viewer?.spin(false); viewer?.clear();
   // Retain one empty renderer/host across selections. Native renderer listeners
@@ -75,33 +65,14 @@ function setStatus(text, state = 'loading') {
   $('#moleculeRetry').hidden = state !== 'error';
   panel.querySelectorAll('.molecule-controls button,.molecule-controls select').forEach(el => el.disabled = state !== 'ready');
 }
-function applyStyle() {
-  if (!viewer) return;
-  const style = $('#moleculeStyle').value === 'space' ? {sphere:{colorscheme:'Jmol'}} : {stick:{radius:.16,colorscheme:'Jmol'},sphere:{scale:.28,colorscheme:'Jmol'}};
-  viewer.setStyle({},style); viewer.render();
-}
+function applyStyle(){if(viewer)applyMoleculeStyle(viewer,$('#moleculeStyle').value)}
 function reset() {
   if (!viewer || !defaultView) return;
   pauseForInteraction(); viewer.setView([...defaultView]); viewer.render();
 }
-function generate(smiles, id) {
-  if (cache.has(smiles)) return Promise.resolve(cache.get(smiles));
-  return new Promise((resolve,reject) => {
-    worker = new Worker(new URL('./vendor/openbabel/conformer-worker.js',import.meta.url));
-    timer = setTimeout(() => { worker?.terminate(); worker=null; reject(new Error('Preparing a reliable conformer took too long. You can retry.')); },45000);
-    worker.onerror = () => { clearTimeout(timer); worker?.terminate(); worker=null; reject(new Error('The browser chemistry engine is unavailable.')); };
-    worker.onmessage = ({data}) => {
-      if (data.id !== id || id !== selection) return;
-      if (data.type === 'progress') { setStatus(data.text); return; }
-      clearTimeout(timer); worker?.terminate(); worker=null;
-      if (data.type === 'error') reject(new Error(data.error));
-      else if (data.type === 'result' && data.sourceSmiles === smiles) {
-        if (cache.size >= 6) cache.delete(cache.keys().next().value);
-        cache.set(smiles,data); resolve(data);
-      } else reject(new Error('The conformer does not match the selected compound.'));
-    };
-    worker.postMessage({id,smiles});
-  });
+function generate(smiles,id){
+  conformerAbort?.abort();conformerAbort=new AbortController();
+  return requestConformer(smiles,{signal:conformerAbort.signal,onProgress:text=>{if(id===selection)setStatus(text)}});
 }
 export async function openCompoundViewer(compound) {
   stopWork();
@@ -135,16 +106,7 @@ export async function openCompoundViewer(compound) {
   $('#moleculeZoomOut').onclick=()=>{pauseForInteraction();viewer?.zoom(1/1.15);viewer?.render()};
   if (!rendererHost.dataset.interactionsBound) {
   rendererHost.dataset.interactionsBound='true';
-  $('#moleculeCanvas').addEventListener('keydown',event=>{
-    if (!viewer) return;
-    if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','=','-','Home'].includes(event.key)) {
-      event.preventDefault(); pauseForInteraction();
-      if(event.key==='Home')reset();
-      else if(['+','=','-'].includes(event.key))viewer.zoom(event.key==='-'?1/1.15:1.15);
-      else viewer.rotate(event.key==='ArrowLeft'||event.key==='ArrowUp'?-12:12,event.key==='ArrowLeft'||event.key==='ArrowRight'?'y':'x');
-      viewer.render();
-    }
-  });
+  $('#moleculeCanvas').addEventListener('keydown',event=>molecularKey(viewer,event,reset,pauseForInteraction));
   $('#moleculeCanvas').addEventListener('pointerdown',pauseForInteraction,{passive:true});
   $('#moleculeCanvas').addEventListener('pointermove',event=>{if(event.buttons)pauseForInteraction()},{passive:true});
   $('#moleculeCanvas').addEventListener('wheel',pauseForInteraction,{passive:true});
@@ -155,13 +117,8 @@ export async function openCompoundViewer(compound) {
     if (id!==selection || !dialog.open) return;
     if (!library) throw new Error('The molecular renderer is unavailable.');
     const target=$('#moleculeCanvas');
-    if (!viewer) viewer=library.createViewer(target,{backgroundColor:'#0b1510',backgroundAlpha:0,antialias:true});
-    else viewer.resize();
-    viewer.setView([0,0,0,0,0,0,0,1]);
-    const model=viewer.addModel(result.molblock,'mol',{keepH:true});
-    if(model.selectedAtoms({}).length!==result.atomCount)throw new Error('The renderer could not read every atom in the conformer.');
-    applyStyle(); viewer.zoomTo(); viewer.zoom(.88); viewer.render(); defaultView=[...viewer.getView()];
-    canvas=target.querySelector('canvas');
+    const scene=renderMolecule(library,target,result,viewer);viewer=scene.viewer;defaultView=scene.defaultView;
+    applyStyle();
     panel.dataset.atomCount=String(result.atomCount);panel.dataset.identity=result.identity;
     const elementColours={C:['Carbon','#909090'],H:['Hydrogen','#ffffff'],N:['Nitrogen','#3050f8'],O:['Oxygen','#ff0d0d'],S:['Sulfur','#ffff30'],F:['Fluorine','#90e050'],Cl:['Chlorine','#1ff01f'],Br:['Bromine','#a62929'],P:['Phosphorus','#ff8000']};
     const legend=$('.atom-legend');legend.replaceChildren();
@@ -172,7 +129,7 @@ export async function openCompoundViewer(compound) {
     updateSpin();
   } catch(error) {
     if(id!==selection || !dialog.open)return;
-    clearTimeout(timer);worker?.terminate();worker=null;
+    conformerAbort?.abort();conformerAbort=null;
     viewer?.spin(false);viewer?.clear();
     setStatus('3D structure unavailable. '+error.message+' The original SMILES and screening details remain available below.','error');
   }

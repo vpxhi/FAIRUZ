@@ -1,6 +1,6 @@
 # Molecular visualization dependencies
 
-Loaded only when a compound is opened. All files are served locally; no compound or SMILES is sent to an external service. Approximately 8.9 MB on first use, normally browser-cached afterward. Only the selected molecule is rendered; up to six accepted conformers are kept in memory.
+Loaded on demand when the completed-screening reveal or compound details open. All files are served locally; no compound or SMILES is sent to an external service. Approximately 8.9 MB on first use, normally browser-cached afterward. One shared worker prepares conformers sequentially; up to six accepted conformers are cached in memory. The detail viewer and three preview slots retain their renderers across openings. Previews load when visible, stop rotating when hidden, and clear their molecular models on close. The chemistry worker is released after 30 seconds idle.
 
 - **3Dmol.js 2.5.5** (BSD): molecular WebGL rendering, spheres/cylinders, Jmol element colours, van der Waals atom radii, rotation and zoom. Source: https://github.com/3dmol/3Dmol.js/tree/2.5.5 . License: `3dmol/LICENSE.txt`.
 - **Open Babel WebAssembly distributed in Kekule 1.0.4**: browser-only 3D conformer generation with the exposed MMFF94 generation wrapper. Open Babel is GPL v2; `openbabel/COPYING.txt` is included. Source and build bindings: https://github.com/partridgejiang/Kekule.js/tree/v1.0.4/src/_extras/OpenBabel ; upstream source: https://github.com/openbabel/openbabel . Kekule wrapper MIT license is included separately.
