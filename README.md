@@ -91,3 +91,10 @@ Statistics reads the latest completed run, independently of table search/filter 
 Summary averages and bin counts are descriptive frontend calculations. No model input, prediction, rank, AI evidence or export format is changed. Existing model validation metrics remain explicitly synthetic. Probability of success is labelled **Not available**; existing ranks provide Screening Priority without an invented probability or confidence percentage. Empty or missing metrics do not receive fabricated values.
 
 Chart.js 4.6.1 (MIT), approximately 210 KB, is pinned under `dist/vendor/chartjs` with its license and hash. It loads only when Statistics has current results. No new API or backend service is used. The site remains buildless and has no build/lint script. Run `node scripts/statistics-check.mjs` with the local server running for exact chart-data comparisons, all supported targets, branding, exports, 3D links, chart controls, accessibility and responsive/empty-state coverage.
+
+## Contributors
+
+- Husain Haj Issa
+- Ilyass jerrah
+- Yusuf Khalaf
+- Ziad Eid
