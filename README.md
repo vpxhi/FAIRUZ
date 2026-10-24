@@ -55,3 +55,14 @@ Evidence selection uses cosine similarity between neural sentence embeddings. Qu
 ## Assay display placeholders
 
 The Assay placeholders tab and candidate detail views include deterministic fabricated IC50, EC50 and CC50 values in micromolar units, three simulated values per endpoint, sample SD and SI = CC50/EC50. They are independent UI fixtures, not model outputs, experimental replicates, validation data or biological evidence. Every record has dataOrigin=synthetic_placeholder, measurementStatus=not_performed and biologicalEvidence=false. Separate placeholder CSV exports preserve those flags and simulated values; JSON result reports embed the same records. The ranking model and its validation metrics are unaffected.
+
+
+## Interactive molecular exploration
+
+Selecting a compound now opens a docked 3D structure panel beside the results on large screens, or a large modal on smaller screens. Rotate by dragging or using arrow keys, zoom by scrolling/pinching or with the controls, reset with Home or Reset view, and switch between ball-and-stick and space-filling representations. Automatic rotation respects reduced motion and pauses during interaction, off screen, and when the page is hidden.
+
+The existing dataset has SMILES but no 3D coordinates. Open Babel WebAssembly generates an illustrative MMFF94 conformer in a separate browser worker, and 3Dmol.js renders it. The selected compound's SMILES stays on the device; no new API or backend service is used. Libraries are pinned and vendored under `dist/vendor`, with licenses and archive hashes. About 9 MB loads on first use only. One renderer is reused across selections, and the in-memory conformer cache is capped at six entries.
+
+Generated coordinates are not measured structures, protein-bound poses, verified stereochemical assignments, or evidence of activity. They never enter model inputs, rankings, scientific metrics, AI evidence, saved data, or exports. Failed parsing, identity/geometry checks, a timeout, or unavailable rendering produces an explicit unavailable state while retaining the original compound details. WebAssembly and WebGL are required for 3D.
+
+With the local server running, `node scripts/viewer-check.mjs` exercises actual conformer generation, rotations, zoom/reset, representations, rapid switching, desktop/mobile modes, reduced motion, and failure states. It uses the same Windows Edge executable as the existing browser tests. Library provenance and licenses: `dist/vendor/README.md`.

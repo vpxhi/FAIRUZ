@@ -1,0 +1,51 @@
+[
+  {
+    "file": "openbabel/openbabel.js",
+    "bytes": 1420576,
+    "sha256": "5e895fb68e1c80e0e8c94f24f3f4f5c3ba70b07e8ee5a394a1974001b962ce82",
+    "package": "kekule@1.0.4",
+    "source": "https://registry.npmjs.org/kekule/-/kekule-1.0.4.tgz"
+  },
+  {
+    "file": "openbabel/openbabel.wasm",
+    "bytes": 4097831,
+    "sha256": "7822651af18039c57ec8660d01193ac215381c18cbe69fc5bedddfa00a180cdc",
+    "package": "kekule@1.0.4",
+    "source": "https://registry.npmjs.org/kekule/-/kekule-1.0.4.tgz"
+  },
+  {
+    "file": "openbabel/openbabel.data",
+    "bytes": 2853362,
+    "sha256": "382090ab1002bd6319d339d51c52df5fed8c63ce1183ed08a3d7f079da8ec572",
+    "package": "kekule@1.0.4",
+    "source": "https://registry.npmjs.org/kekule/-/kekule-1.0.4.tgz"
+  },
+  {
+    "file": "openbabel/KEKULE-LICENSE.txt",
+    "bytes": 1088,
+    "sha256": "14ad2a020bb3eee64b685c14ab36f2d49391de8010efe245ab46e7d1c27e47ad",
+    "package": "kekule@1.0.4",
+    "source": "https://registry.npmjs.org/kekule/-/kekule-1.0.4.tgz"
+  },
+  {
+    "file": "3dmol/3Dmol-min.js",
+    "bytes": 537792,
+    "sha256": "f7cc78921ae72e7623e89cdd111434f58c2efddd2ffda1cd212644b406fb8016",
+    "package": "3dmol@2.5.5",
+    "source": "https://registry.npmjs.org/3dmol/-/3dmol-2.5.5.tgz"
+  },
+  {
+    "file": "3dmol/LICENSE.txt",
+    "bytes": 4283,
+    "sha256": "4c6eaaed856f3f28a3b1a98e74f4a8a71618de7d51ea4155c29f6f793bcef861",
+    "package": "3dmol@2.5.5",
+    "source": "https://registry.npmjs.org/3dmol/-/3dmol-2.5.5.tgz"
+  },
+  {
+    "file": "3dmol/3Dmol-min.js.LICENSE.txt",
+    "bytes": 120,
+    "sha256": "ae3bfc688d0c9687b76e0ecc7fece0b393bcb4acf2aee09e19dda697eaa10b16",
+    "package": "3dmol@2.5.5",
+    "source": "https://registry.npmjs.org/3dmol/-/3dmol-2.5.5.tgz"
+  }
+]
