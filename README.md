@@ -51,3 +51,7 @@ Model verification checks Python/JavaScript prediction agreement, artifact hashe
 All data are generated fixtures for this prototype. Do not use this synthetic study to nominate real treatments or claim compound activity.
 
 Evidence selection uses cosine similarity between neural sentence embeddings. Question answering extracts a span from the retrieved source text. A retrieval score below 0.2 or answer-span score below 0.04 causes abstention; both are prototype heuristics, not calibrated confidence thresholds. Clinical-treatment questions are restricted to study-scope evidence. The assistant does not browse the web, retrieve patient data, or make therapeutic decisions.
+
+## Assay display placeholders
+
+The Assay placeholders tab and candidate detail views include deterministic fabricated IC50, EC50 and CC50 values in micromolar units, three simulated values per endpoint, sample SD and SI = CC50/EC50. They are independent UI fixtures, not model outputs, experimental replicates, validation data or biological evidence. Every record has dataOrigin=synthetic_placeholder, measurementStatus=not_performed and biologicalEvidence=false. Separate placeholder CSV exports preserve those flags and simulated values; JSON result reports embed the same records. The ranking model and its validation metrics are unaffected.
