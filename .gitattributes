@@ -1,0 +1,2 @@
+# Preserve vendored library bytes and binary data offsets across platforms.
+dist/vendor/** -text
