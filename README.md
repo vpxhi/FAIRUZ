@@ -1,6 +1,6 @@
-# Fairouz — synthetic computational research workspace
+# fairuz — synthetic computational research workspace
 
-Fairouz is a research demonstration built for the Leeds AI in Healthcare hackathon. It now performs real machine-learning inference on an explicitly artificial dataset. It does not assess real antiviral compatibility, safety or treatment efficacy.
+fairuz is a research demonstration built for the Leeds AI in Healthcare hackathon. It now performs real machine-learning inference on an explicitly artificial dataset. It does not assess real antiviral compatibility, safety or treatment efficacy.
 
 ## What runs
 
@@ -46,7 +46,7 @@ Model verification checks Python/JavaScript prediction agreement, artifact hashe
 - Chemistry descriptors: RDKit 2026.9.1, BSD-3-Clause — https://www.rdkit.org/
 - Semantic retrieval: Xenova/all-MiniLM-L6-v2 (Apache-2.0). Extractive question answering: Xenova/distilbert-base-cased-distilled-squad (Apache-2.0). Model cards: https://huggingface.co/Xenova/all-MiniLM-L6-v2 and https://huggingface.co/Xenova/distilbert-base-cased-distilled-squad .
 - Browser inference: @huggingface/transformers 3.8.1, Apache-2.0 — https://huggingface.co/docs/transformers.js/
-- Workflow inspiration: https://github.com/kexinhuang12345/DeepPurpose . Fairouz does not bundle or run DeepPurpose code or checkpoints.
+- Workflow inspiration: https://github.com/kexinhuang12345/DeepPurpose . fairuz does not bundle or run DeepPurpose code or checkpoints.
 
 All data are generated fixtures for this prototype. Do not use this synthetic study to nominate real treatments or claim compound activity.
 
@@ -75,3 +75,20 @@ Each successful screening (including the initial automatic demonstration) opens 
 Each card has an interactive SMILES-derived conformer with drag/keyboard rotation, scroll/pinch/button zoom, reset, and optional automatic rotation. The cards share the existing Open Babel/3Dmol runtime and six-entry conformer cache; the original detailed viewer remains available through **View details**. **Explore all results** returns to the existing table. Closing or pressing Escape preserves results and restores keyboard focus. Smaller result sets adjust the title and card count; unavailable 3D structures retain the actual scores and navigation.
 
 The synthetic-data limitation is visible inside the reveal. Generated conformers are illustrative and never enter screening inputs, rankings, AI evidence or exports. No new dependencies or backend services were added. With the server running, use `node scripts/top3-check.mjs` for reveal-specific completion, 3D interaction, navigation, boundary-case, failure, and responsive-layout checks. Existing browser tests dismiss the intentional reveal before continuing their original workflows.
+
+
+## Workspaces and screening targets
+
+Visible application branding is **fairuz**. Existing storage keys, export formats and filenames, repository/configuration identifiers, and model IDs are retained for compatibility.
+
+Overview contains the only screening setup. Its dropdown offers exactly the original supported contexts: SARS-CoV-2 / Mpro (`sars`), Influenza A / neuraminidase (`flu`), and Hepatitis C / NS3/4A (`hcv`). The selected target card updates from the existing model metadata. No import or unsupported-virus choice is exposed. Model definitions, training artifacts and inference behavior are unchanged.
+
+Results, Saved compounds, Statistics and AI assistant have dedicated workspaces. Testing plan, AI performance and History remain accessible under secondary navigation. Navigation preserves the current screening, saved IDs and assistant state. The previous screening destination is an internal alias to Overview, without a separate sidebar page or duplicated setup.
+
+## Statistics workspace
+
+Statistics reads the latest completed run, independently of table search/filter settings. Five interactive charts show top predicted activity (horizontal bars), the activity distribution (histogram), activity versus tree disagreement (scatter), training similarity (bars), and the full ranking profile (two labelled line-series axes). Top 5/10/20 controls affect comparisons only. Exact original values are available in hover tooltips; keyboard arrows inspect points and Enter opens compound details. Accessible data tables provide the same compounds and values. Histogram ranges show counts and links to their contained compounds; series toggles and reset affect charts only.
+
+Summary averages and bin counts are descriptive frontend calculations. No model input, prediction, rank, AI evidence or export format is changed. Existing model validation metrics remain explicitly synthetic. Probability of success is labelled **Not available**; existing ranks provide Screening Priority without an invented probability or confidence percentage. Empty or missing metrics do not receive fabricated values.
+
+Chart.js 4.6.1 (MIT), approximately 210 KB, is pinned under `dist/vendor/chartjs` with its license and hash. It loads only when Statistics has current results. No new API or backend service is used. The site remains buildless and has no build/lint script. Run `node scripts/statistics-check.mjs` with the local server running for exact chart-data comparisons, all supported targets, branding, exports, 3D links, chart controls, accessibility and responsive/empty-state coverage.

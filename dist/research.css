@@ -596,3 +596,118 @@ body.top3-open { overflow:hidden; }
   .top3-footer>div { width:100%; justify-content:space-between; }
 }
 @media(prefers-reduced-motion:reduce) { #top3Results,#top3Results::backdrop,.top3-card,.top3-molecule-status::before { animation:none!important; } }
+
+/* Focused screening and workspace navigation. No screening controls outside Overview. */
+.nav-secondary { display:grid; gap:6px; margin-top:19px; }
+.nav-secondary .nav-label { margin:0 12px 5px; font-size:8px; color:#91a898; }
+.workspace-heading { margin:10px 0 28px; }
+.workspace-heading h1 { font-size:36px; margin:12px 0; }
+.workspace-heading p { margin:0; font-size:14px; line-height:1.9; color:#a8beaf; }
+.fixed-target-card { display:flex; align-items:flex-start; gap:18px; min-height:218px; padding:24px 21px; margin-top:17px; background:radial-gradient(ellipse at top left,#36684133,transparent 75%),#122219; border:1px solid #4a7153; border-radius:13px; }
+.fixed-target-mark { width:43px; height:43px; border-radius:12px; background:#274c32; border:1px solid #537a5a; display:grid; place-items:center; color:#a9eeb9; font-size:28px; flex-shrink:0; }
+.fixed-target-card .tag { font-size:7px; letter-spacing:1px; }
+.fixed-target-card h3 { font:600 24px/1.4 Manrope,sans-serif; color:#e2f1e3; margin:12px 0 3px; letter-spacing:-.6px; }
+.fixed-target-card strong { font-size:15px; color:#c6e5cc; }
+.fixed-target-card p { font-size:12px; color:#adc6b3; line-height:1.85; margin:12px 0; }
+.fixed-target-card #targetNote { display:block; font-size:10px; color:#9ebda6; line-height:1.8; }
+body[data-workspace=assistant] .agent { min-height:650px; }
+body[data-workspace=assistant] .agent #messages { min-height:340px; height:42vh; }
+/* Statistics: large, readable chart cards with independent controls and data alternatives. */
+.statistics-heading { display:flex; justify-content:space-between; align-items:center; gap:24px; margin:8px 0 27px; }
+.statistics-heading h1 { font-size:clamp(30px,3vw,42px); margin:14px 0; }
+.statistics-heading p { max-width:670px; color:#a7bfae; font-size:14px; line-height:1.9; margin:0; }
+.statistics-context { font:10px monospace; color:#a5d4b3; letter-spacing:2px; border:1px solid #3c6249; padding:10px 13px; border-radius:8px; white-space:nowrap; background:#1a3023; }
+.statistics-run { color:#a3bdac; font:10px/1.9 monospace; margin-bottom:20px; overflow-wrap:anywhere; }
+.statistics-empty { min-height:330px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:17px; padding:36px; background:radial-gradient(ellipse at top right,#265b3438,transparent 70%),#132019; }
+.statistics-empty p { color:#b0c8b8; max-width:620px; line-height:1.9; margin:0; }
+.empty-chart-icon { color:#a5e3ba; display:grid; place-items:center; height:48px; width:48px; border:1px solid #4c7356; border-radius:12px; background:#25462f; font-size:28px; }
+.statistics-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:0 0 24px; }
+.statistics-metrics article { border:1px solid #375340; background:linear-gradient(135deg,#1b3022,#121f17); border-radius:13px; padding:21px 20px; min-width:0; transition:transform .18s,border-color .18s; }
+.statistics-metrics article:hover { transform:translateY(-3px); border-color:#6c9b7a; }
+.statistics-metrics article:first-child { background:radial-gradient(ellipse at top right,#376e3e33,transparent),#182d20; border-color:#50735a; }
+.statistics-metrics span { display:block; color:#bed5c7; font-size:11px; line-height:1.7; min-height:37px; }
+.statistics-metrics strong { font:600 32px/1.5 Manrope,sans-serif; color:#d2f0dc; letter-spacing:-.8px; font-variant-numeric:tabular-nums; display:block; margin:7px 0 5px; overflow-wrap:anywhere; }
+.statistics-metrics small { font-size:10px; color:#a9c4b2; }
+.statistics-toolbar { display:flex; justify-content:space-between; align-items:center; gap:20px; border:1px solid #2d4938; border-radius:11px; padding:15px 19px; background:#14241a; margin-bottom:22px; }
+.statistics-toolbar>div { display:flex; gap:13px; align-items:center; flex-shrink:0; }
+.statistics-toolbar label { margin:0; color:#c1dacb; font-size:12px; }
+.statistics-toolbar select { min-height:41px; font-size:12px; width:110px; padding:10px 27px 10px 12px; }
+.statistics-toolbar p { color:#9ebba8; font-size:11px; margin:0; line-height:1.8; }
+.statistics-toolbar .button { min-height:41px; white-space:nowrap; font-size:11px; }
+.statistics-chart-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; margin-bottom:26px; }
+.statistics-chart-card { padding:24px; background:radial-gradient(ellipse at top right,#244d3222,transparent 65%),#121e17; border-color:#344e3e; animation:content-in .25s ease-out; min-width:0; }
+.statistics-chart-card[data-chart=profile] { grid-column:1/-1; }
+.statistics-chart-top { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; }
+.statistics-chart-top h2 { font-size:18px; line-height:1.5; }
+.statistics-chart-top .tag { font-size:7px; flex-shrink:0; background:#1c3426; }
+.statistics-chart-description { font-size:12px; color:#aac3b2; line-height:1.85; margin:11px 0 20px; }
+.statistics-chart-box { position:relative; height:325px; min-width:0; overflow:hidden; border-radius:8px; }
+.statistics-chart-box:focus-within { outline:2px solid #8cd9a5; outline-offset:3px; }
+.statistics-chart-box canvas { width:100%!important; height:100%!important; }
+.statistics-chart-status { position:absolute; inset:0; display:grid; place-items:center; padding:25px; background:linear-gradient(110deg,#14241c,#20392a,#14241c); background-size:200% 100%; animation:chart-loading 2.4s ease-in-out infinite alternate; color:#bad3c3; text-align:center; font-size:12px; line-height:1.9; margin:0; pointer-events:none; }
+.statistics-chart-note { color:#a2bdac; font-size:10px; line-height:1.9; margin:16px 0 0; min-height:36px; }
+.statistics-chart-data { font-size:11px; padding-top:12px; margin-top:16px; }
+.statistics-table-wrap { overflow:auto; max-height:290px; border:1px solid #304e3b; border-radius:9px; margin-top:14px; scrollbar-color:#4a6a56 #14221a; }
+.statistics-table-wrap th { color:#b1cebc; font-size:9px; padding:13px 15px; background:#1a3023; }
+.statistics-table-wrap td { font-size:11px; padding:13px 15px; color:#bad4c3; }
+.statistics-table-wrap .compound-link strong { font-size:11px; color:#b5edc6; }
+.statistics-series { display:flex; gap:13px; flex-wrap:wrap; margin:-5px 0 17px; }
+.statistics-series:empty { display:none; }
+.statistics-series label { display:flex; align-items:center; gap:7px; font-size:10px; font-weight:400; margin:0; color:#bad4c5; }
+.statistics-series input { padding:0; width:14px; height:14px; min-height:0; accent-color:#82d8a7; }
+.statistics-bin-selection { border:1px solid #446b50; background:#1b3424; padding:12px 14px; border-radius:9px; margin-top:13px; }
+.statistics-bin-selection p { color:#c5dfcf; font-size:11px; margin:0 0 10px; line-height:1.8; }
+.statistics-bin-selection>div { display:flex; gap:14px; flex-wrap:wrap; }
+.statistics-bin-selection small { font-size:9px; color:#aac6b4; margin-top:9px; }
+.statistics-reliability { padding:28px; margin-bottom:24px; background:linear-gradient(125deg,#1a2c20,#122018); }
+.statistics-reliability>h2 { margin-top:12px; font-size:23px; }
+.statistics-reliability h3 { font-size:17px; color:#d6eadd; margin:25px 0 11px; }
+.statistics-reliability>p { color:#acc7b5; font-size:12px; line-height:1.9; max-width:1000px; }
+.statistics-reliability-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin:23px 0 24px; }
+.statistics-reliability-grid article { background:#112217; border:1px solid #395e46; border-radius:11px; padding:21px; min-width:0; }
+.statistics-reliability-grid article>span { display:block; font-size:11px; color:#a7c8b2; margin-bottom:13px; }
+.statistics-reliability-grid strong { font:600 24px Manrope,sans-serif; color:#d8e7d4; }
+.statistics-reliability-grid p { font-size:11px; color:#abc7b5; line-height:1.9; }
+.probability-unavailable { border-color:#5e6047!important; background:radial-gradient(ellipse at top right,#5d624524,transparent),#18251a!important; }
+#statisticsValidation dl { display:grid; grid-template-columns:1fr auto; gap:8px; font-size:11px; color:#b0cbb9; margin:0 0 15px; }
+#statisticsValidation dd { margin:0; font-variant-numeric:tabular-nums; color:#d3e9db; }
+#statisticsValidation small { color:#a1bea9; font-size:9px; overflow-wrap:anywhere; }
+.statistics-caveat { border-left:2px solid #759b70; padding:8px 15px; margin:20px 0 0; font-size:11px!important; color:#b4cbb5!important; }
+.statistics-insights { background:radial-gradient(ellipse at top left,#295b3c28,transparent 60%),#13231a; }
+.statistics-insights .panel-heading { gap:14px; }
+.statistics-insights .muted { margin-bottom:18px; font-size:12px; }
+#statisticsObservations { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px; }
+#statisticsObservations article { display:flex; gap:12px; background:#1c3325; border:1px solid #3c5f48; border-radius:10px; padding:18px 16px; align-items:flex-start; }
+#statisticsObservations article>span { color:#a2d0b0; font:10px monospace; border:1px solid #4c7157; border-radius:6px; padding:6px; flex-shrink:0; }
+#statisticsObservations p { margin:0; color:#b4d0be; font-size:11px; line-height:1.9; }
+#statisticsObservations strong { display:block; color:#d6eddf; margin-bottom:7px; font-weight:500; }
+.statistics-footnote { color:#9ebaa9; font-size:10px; line-height:1.9; padding:0 2px; margin:20px 0 0; }
+@keyframes chart-loading { to { background-position:100% 50%; } }
+@media(max-width:1250px) {
+ .statistics-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .statistics-toolbar { flex-wrap:wrap; }
+ .statistics-toolbar p { order:3; flex-basis:100%; }
+ .statistics-chart-card { padding:20px; }
+ .statistics-chart-top { flex-wrap:wrap; gap:8px; }
+ #statisticsObservations { grid-template-columns:1fr; }
+ .statistics-heading { align-items:flex-start; }
+ .statistics-context { display:none; }
+}
+@media(max-width:1000px) { .statistics-chart-grid { grid-template-columns:1fr; } .statistics-reliability-grid { grid-template-columns:1fr; } }
+@media(max-width:700px) {
+ .nav-secondary { display:contents; margin:0; }.nav-secondary .nav-label { display:none; }
+ .workspace-heading h1 { font-size:28px; }.workspace-heading p { font-size:12px; }
+ .fixed-target-card { min-height:0; padding:18px 14px; gap:12px; }.fixed-target-mark { height:35px; width:35px; font-size:23px; }
+ .fixed-target-card h3 { font-size:22px; }.fixed-target-card strong { font-size:14px; }.fixed-target-card p { font-size:11px; }.fixed-target-card .tag { font-size:6px; }
+ .statistics-heading { margin:0 0 24px; }.statistics-heading h1 { font-size:30px; }.statistics-heading p { font-size:12px; }
+ .statistics-run { font-size:9px; }
+ .statistics-metrics { gap:10px; }.statistics-metrics article { padding:16px 13px; }.statistics-metrics span { font-size:10px; min-height:34px; }.statistics-metrics strong { font-size:27px; }.statistics-metrics small { font-size:9px; }
+ .statistics-toolbar { padding:15px; gap:14px; }.statistics-toolbar>div { width:100%; justify-content:space-between; }.statistics-toolbar .button { width:100%; }.statistics-toolbar p { font-size:10px; }
+ .statistics-chart-card { padding:20px 15px; }.statistics-chart-top h2 { font-size:17px; }.statistics-chart-description { font-size:11px; }.statistics-chart-box { height:305px; }
+ .statistics-chart-data { font-size:10px; }.statistics-chart-note { font-size:10px; }
+ .statistics-reliability { padding:23px 18px; }.statistics-reliability>h2 { font-size:21px; }.statistics-reliability-grid article { padding:18px; }
+ .statistics-insights h2 { font-size:18px; }.statistics-insights .button { font-size:11px; }
+ #statisticsObservations article { padding:16px 14px; }.statistics-empty { padding:25px 20px; }.statistics-empty p { font-size:12px; }
+ body[data-workspace=assistant] .agent #messages { height:48vh; min-height:300px; }
+}
+@media(prefers-reduced-motion:reduce) { .statistics-chart-card,.statistics-chart-status { animation:none!important; } .statistics-metrics article { transition:none; } }

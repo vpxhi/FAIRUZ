@@ -47,5 +47,19 @@
     "sha256": "ae3bfc688d0c9687b76e0ecc7fece0b393bcb4acf2aee09e19dda697eaa10b16",
     "package": "3dmol@2.5.5",
     "source": "https://registry.npmjs.org/3dmol/-/3dmol-2.5.5.tgz"
+  },
+  {
+    "file": "chartjs/chart.umd.js",
+    "bytes": 210078,
+    "sha256": "338399fb5bafe598d21cfc471b0590b61ceb321a985fade4f68499b151f67fbf",
+    "package": "chart.js@4.6.1",
+    "source": "https://registry.npmjs.org/chart.js/-/chart.js-4.6.1.tgz"
+  },
+  {
+    "file": "chartjs/LICENSE.md",
+    "bytes": 1093,
+    "sha256": "41a84aa2caba645f966a18d9c2056b73e6d3a81d80bc0046bc0011a2634d4cce",
+    "package": "chart.js@4.6.1",
+    "source": "https://registry.npmjs.org/chart.js/-/chart.js-4.6.1.tgz"
   }
 ]
