@@ -46,7 +46,6 @@ Model verification checks Python/JavaScript prediction agreement, artifact hashe
 - Chemistry descriptors: RDKit 2026.9.1, BSD-3-Clause — https://www.rdkit.org/
 - Semantic retrieval: Xenova/all-MiniLM-L6-v2 (Apache-2.0). Extractive question answering: Xenova/distilbert-base-cased-distilled-squad (Apache-2.0). Model cards: https://huggingface.co/Xenova/all-MiniLM-L6-v2 and https://huggingface.co/Xenova/distilbert-base-cased-distilled-squad .
 - Browser inference: @huggingface/transformers 3.8.1, Apache-2.0 — https://huggingface.co/docs/transformers.js/
-- Workflow inspiration: https://github.com/kexinhuang12345/DeepPurpose . fairuz does not bundle or run DeepPurpose code or checkpoints.
 
 All data are generated fixtures for this prototype. Do not use this synthetic study to nominate real treatments or claim compound activity.
 
