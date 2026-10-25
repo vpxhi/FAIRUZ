@@ -12,7 +12,8 @@ self.onmessage=async({data})=>{const {id,type,facts,question}=data;try{
  if(!Array.isArray(facts)||!facts.length)throw new Error('No study evidence was supplied.');
  postMessage({type:'generating',id});
  if(type==='summarise'){
-  const goals=['Which compound is first ranked with the highest predicted synthetic pIC50?','How are model uncertainty and validation error reported?','What are the limitations of artificial synthetic data for real antiviral treatment?'];
+  const goals=['Which compound is first ranked with the highest predicted synthetic activity?','How are model uncertainty and validation error reported?','What are the limitations of artificial synthetic data for real antiviral treatment?'];
+  if(facts.some(f=>f.id==='T01'))goals.splice(1,0,'What are the selected target profile parameters and their normalised weights?');
   const embeddings=await vectors([...facts.map(f=>f.text),...goals]);const used=new Set(),selected=[];
   goals.forEach((q,i)=>{const scores=facts.map((f,j)=>({...f,relevance:cosine(embeddings[j],embeddings[facts.length+i])})).filter(f=>!used.has(f.id)&&(i!==0||f.id.startsWith('C'))).sort((a,b)=>b.relevance-a.relevance);const best=scores[0];used.add(best.id);selected.push(best)});
   postMessage({type:'result',id,model:EMBED,revision:EMBED_REV,method:'neural extractive summary',items:selected,text:selected.map((f,i)=>`${i+1}. ${f.text} [${f.id}]`).join('\n\n')});return;

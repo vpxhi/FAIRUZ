@@ -1,5 +1,7 @@
 # fairuz — synthetic computational research workspace
 
+The current frontend runs all installed synthetic reference targets automatically. The entered virus name, type and envelope label the demo session; they do not change predictions or create genuine activity predictions for a custom virus. Results remain separate for each original reference target.
+
 fairuz is a research demonstration built for the Leeds AI in Healthcare hackathon. It now performs real machine-learning inference on an explicitly artificial dataset. It does not assess real antiviral compatibility, safety or treatment efficacy.
 
 ## What runs
@@ -80,7 +82,7 @@ The synthetic-data limitation is visible inside the reveal. Generated conformers
 
 Visible application branding is **fairuz**. Existing storage keys, export formats and filenames, repository/configuration identifiers, and model IDs are retained for compatibility.
 
-Overview contains the only screening setup. Its dropdown offers exactly the original supported contexts: SARS-CoV-2 / Mpro (`sars`), Influenza A / neuraminidase (`flu`), and Hepatitis C / NS3/4A (`hcv`). The selected target card updates from the existing model metadata. No import or unsupported-virus choice is exposed. Model definitions, training artifacts and inference behavior are unchanged.
+Overview contains one simple setup: virus name, genome type and envelope structure, followed by Start AI Screening. There is no Screening Type or Target Protein selection. The frontend automatically runs the existing reference models and keeps their target-specific results separate. No arbitrary real-virus or sequence inference is supported.
 
 Results, Saved compounds, Statistics and AI assistant have dedicated workspaces. Testing plan, AI performance and History remain accessible under secondary navigation. Navigation preserves the current screening, saved IDs and assistant state. The previous screening destination is an internal alias to Overview, without a separate sidebar page or duplicated setup.
 
@@ -88,7 +90,7 @@ Results, Saved compounds, Statistics and AI assistant have dedicated workspaces.
 
 Statistics reads the latest completed run, independently of table search/filter settings. Five interactive charts show top predicted activity (horizontal bars), the activity distribution (histogram), activity versus tree disagreement (scatter), training similarity (bars), and the full ranking profile (two labelled line-series axes). Top 5/10/20 controls affect comparisons only. Exact original values are available in hover tooltips; keyboard arrows inspect points and Enter opens compound details. Accessible data tables provide the same compounds and values. Histogram ranges show counts and links to their contained compounds; series toggles and reset affect charts only.
 
-Summary averages and bin counts are descriptive frontend calculations. No model input, prediction, rank, AI evidence or export format is changed. Existing model validation metrics remain explicitly synthetic. Probability of success is labelled **Not available**; existing ranks provide Screening Priority without an invented probability or confidence percentage. Empty or missing metrics do not receive fabricated values.
+Summary averages and bin counts are descriptive frontend calculations of the latest completed screening. Screening Priority preserves its prediction ranking without an invented probability or confidence percentage. Units, model uncertainty and training references follow the current model. Empty or missing metrics do not receive fabricated values.
 
 Chart.js 4.6.1 (MIT), approximately 210 KB, is pinned under `dist/vendor/chartjs` with its license and hash. It loads only when Statistics has current results. No new API or backend service is used. The site remains buildless and has no build/lint script. Run `node scripts/statistics-check.mjs` with the local server running for exact chart-data comparisons, all supported targets, branding, exports, 3D links, chart controls, accessibility and responsive/empty-state coverage.
 
@@ -98,3 +100,33 @@ Chart.js 4.6.1 (MIT), approximately 210 KB, is pinned under `dist/vendor/chartjs
 - Ilyass jerrah
 - Yusuf Khalaf
 - Ziad Eid
+
+## Simple hackathon screening demo
+
+Overview has three essential fields: **Virus Name**, **Virus Type** (RNA, DNA or Not known), and **Virus Structure** (enveloped, non-enveloped or Not known). Click **Start AI Screening** once; no target selection or review confirmation is required. Optional notes, virus family, library size, local CSV import, descriptive data, reset and configuration preview are inside **Advanced Settings**. Neural summaries are optional and off by default to avoid delaying the demo with first-use model downloads.
+
+The frontend discovers supported reference targets from the existing study metadata and evaluates each original model using unchanged compound features and inference. The current references are SARS-CoV-2 / Mpro, Influenza A / neuraminidase, and Hepatitis C / NS3/4A. Model files are SHA-256 verified before use. A fresh session retains a snapshot of the entered configuration. If a target fails, it is reported and excluded; successful targets remain available. If all fail, no new predictions are created.
+
+These are **synthetic reference demonstrations**, not activity predictions against the user's custom virus. Virus details label the session and do not enter the compound feature vectors. Each target has its own ranking, Top 3, uncertainty and validation measurements. Scores are never pooled or used to fabricate an overall Top 3. Genuine new-virus prediction still requires measured target-specific data, a compatible validated model and a separately authorised integration.
+
+The Top 3 popup opens once after a completed demo session. Its reference-target filter and the shared **View results by reference target** selector update the same active run. Results, Statistics, compound details, saved compounds, assistant evidence and exports use that target's original outputs and immutable session configuration. Filtering or changing pages does not reopen the popup. Manual View Top 3 reopens the current target. Each compound retains its exact SMILES-derived 3D structure, rotation, zoom and reset controls. Missing molecular data is never replaced with an unrelated molecule.
+
+### Optional data and exports
+
+Drafts are saved on the device. Additional property/value/unit rows and uploaded CSV data are descriptive metadata only; uploads never train a model. Configuration CSV supports `virus_name`, `virus_type`, `virus_structure`, `target_description`, `virus_family` and `compound_library`, with one data row. Alternatively import up to 20 rows with `property,value,unit`. Files are limited to 64 KB and previewed before applying. Protein-selection columns are no longer accepted. Clear configuration preserves saved compounds and screening history.
+
+JSON and CSV result exports remain scoped to the active reference target. JSON includes both the original model identity and the entered session configuration, `mode: synthetic-reference-batch`, and `customVirusInference: false`. Configuration export is separate from result export and records reference-session completion without claiming custom-virus inference.
+
+### Run and verify locally
+
+From the repository root in PowerShell, serve the app:
+
+    python -m http.server 8765 --bind 127.0.0.1 --directory dist
+
+Open http://127.0.0.1:8765/ . Enter **Hackathon virus**, select **RNA** and **Enveloped**, and click **Start AI Screening**. The three existing reference models run automatically, followed by the Top 3 popup. Change the viewed reference target to inspect separate rankings and Statistics. Drag a molecule to rotate it, scroll or use the zoom buttons, and select Reset to restore its view. View Full Details opens the exact compound.
+
+For the automated browser harness, serve the repository root in another terminal:
+
+    python -m http.server 8766 --bind 127.0.0.1
+
+Open http://127.0.0.1:8766/scripts/simple-demo-check.html . Existing check-page URLs redirect to this harness. It currently passes **94 checks** covering the removed selections, single-click start, all three original models, 30 Python/JavaScript parity fixtures, exact ranked predictions, separate target context, actual 3D rendering and controls, full compound details, Statistics, saved compounds, exports, and partial/all-target failures. Assistant evidence wiring is checked with a worker stub; neural model downloads are not part of this test. The site is buildless with no build script; checks load its real ES modules in the browser.

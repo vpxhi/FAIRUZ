@@ -711,3 +711,89 @@ body[data-workspace=assistant] .agent #messages { min-height:340px; height:42vh;
  body[data-workspace=assistant] .agent #messages { height:48vh; min-height:300px; }
 }
 @media(prefers-reduced-motion:reduce) { .statistics-chart-card,.statistics-chart-status { animation:none!important; } .statistics-metrics article { transition:none; } }
+
+.target-demo{margin:24px 0;padding:28px}.target-demo h2{margin:10px 0}.target-demo p{line-height:1.65}.target-demo-fields{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:16px;margin:20px 0}.target-demo-fields label{display:flex;flex-direction:column;gap:8px}.target-demo-fields input{width:100%;min-width:0}.target-demo-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}.target-demo-metrics article{padding:16px;border:1px solid #45614d;border-radius:12px}.target-demo-metrics span{display:block;font-size:12px}.target-demo-metrics strong{display:block;font-size:26px;margin-top:8px}@media(max-width:760px){.target-demo{padding:18px}.target-demo-fields,.target-demo-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.target-demo-fields label:first-child{grid-column:1/-1}}
+
+.setup-step .target-demo { margin:18px 0 0; padding:18px; border:1px solid #435c49; border-radius:12px; }
+.setup-step .target-demo h2 { font-size:19px; }
+.target-demo-inputs { min-width:0; border:0; margin:0; padding:0; }
+.target-demo-inputs>legend { margin:14px 0 0; }
+.setup-step .target-demo-fields { grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.setup-step .target-demo-fields label:first-child,.target-demo-notes { grid-column:1/-1; }
+.target-demo-fields textarea { width:100%; min-width:0; resize:vertical; }
+.target-demo-notes small { font-size:11px; font-weight:400; line-height:1.5; color:var(--muted); }
+.setup-step .target-demo-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+@media(max-width:440px) { .setup-step .target-demo-fields { grid-template-columns:minmax(0,1fr); } }
+
+.target-demo-fields select { width:100%; min-width:0; }
+.target-demo-fields label small { font-size:11px; font-weight:400; line-height:1.5; color:var(--muted); }
+
+/* Custom-virus configuration: metadata first, inference only after compatibility. */
+.main-grid { grid-template-columns:minmax(0,1fr); }
+#screenPanel { max-width:1120px; width:100%; margin-inline:auto; border-color:#396b50; box-shadow:0 0 65px #2682540d; }
+#screenPanel h2 { font-size:clamp(24px,3vw,34px); }
+.custom-context-step { border:0; padding:0; margin:20px 0 28px; max-width:360px; }
+.custom-context-step .fixed-target-card { display:none; }
+.custom-context-step>label { display:block; margin-bottom:8px; }
+.custom-context-step #virus { width:100%; }
+.custom-virus-setup fieldset { border:0; margin:0; padding:0; min-width:0; }
+.custom-virus-info>legend { display:flex; align-items:center; gap:12px; font-size:21px; font-weight:650; margin-bottom:10px; }
+.custom-virus-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; margin:22px 0; }
+.custom-virus-fields label { display:flex; flex-direction:column; gap:9px; font-size:14px; color:#dcecdf; }
+.custom-virus-fields input,.custom-virus-fields select,.custom-virus-fields textarea { width:100%; min-width:0; min-height:50px; transition:border-color .2s,box-shadow .2s; }
+.custom-virus-fields :is(input,select,textarea):focus { border-color:#68d49a; box-shadow:0 0 0 3px #68d49a12; }
+.custom-virus-fields small { font-size:12px; font-weight:400; line-height:1.6; color:#9cb5a3; }
+.custom-wide { grid-column:1/-1; }
+.custom-virus-fields textarea { resize:vertical; }
+.custom-virus-properties { border:1px solid #395440; border-radius:14px; padding:22px; margin:24px 0; background:#11201977; }
+.custom-virus-properties>summary { display:flex; align-items:center; gap:12px; cursor:pointer; font-size:17px; font-weight:600; }
+.custom-virus-properties>summary::after { content:'+'; margin-left:auto; color:#a2e6b8; font-size:24px; }
+.custom-virus-properties[open]>summary::after { content:'-'; }
+.custom-model-inputs { border-left:3px solid #518c66; padding:4px 18px; font-size:13px; line-height:1.75; color:#b2c8b6; }
+.custom-library-options { padding-top:22px!important; }
+.custom-library-options>legend { font-size:16px; }
+.custom-library-options label { display:block; margin-top:15px; }
+.custom-library-options select { width:100%; }
+.custom-compatibility { border:1px solid #416a51; background:linear-gradient(120deg,#18352499,#0d1911); border-radius:14px; padding:22px; margin-top:24px; }
+.custom-compatibility h3 { font-size:18px; margin:12px 0; }
+.custom-compatibility p { font-size:14px; line-height:1.7; color:#b7ccbb; margin:0; }
+.custom-compatibility.checked { border-color:#a4935e; }
+#screenForm .setup-launch { margin-top:30px; }
+#runButton { min-height:62px; font-size:16px; box-shadow:0 0 28px #65cc8120; }
+#screenForm[aria-busy=true] #runButton { animation:custom-check-pulse 1s ease-in-out infinite; }
+.custom-configuration-summary,.statistics-performance { padding:24px; margin-bottom:24px; }
+.custom-configuration-summary dl,.statistics-performance dl { display:grid; grid-template-columns:minmax(100px,1fr) minmax(0,3fr); gap:10px 18px; line-height:1.6; }
+.custom-configuration-summary dt,.statistics-performance dt { color:#a2bda8; }.custom-configuration-summary dd,.statistics-performance dd { margin:0; overflow-wrap:anywhere; }
+@keyframes custom-check-pulse { 50% { box-shadow:0 0 36px #65cc8140; } }
+@media(max-width:650px) { .custom-virus-fields { grid-template-columns:minmax(0,1fr); gap:18px; }.custom-virus-properties { padding:17px; }.custom-virus-properties>summary { font-size:15px; }.custom-virus-properties .tag { display:none; }.custom-configuration-summary dl { grid-template-columns:minmax(0,1fr); gap:4px; }.custom-configuration-summary dd { margin-bottom:10px; }#runButton { width:100%; } }
+@media(prefers-reduced-motion:reduce) { #screenForm[aria-busy=true] #runButton { animation:none; } }
+
+.custom-virus-fields label { margin:0; }
+
+.custom-own-data,.custom-review { margin:24px 0; padding:24px; border:1px solid #395440; border-radius:14px; background:#11201977; }
+.custom-own-data>summary { cursor:pointer; font-size:17px; font-weight:600; }
+.custom-review h3 { display:flex; align-items:center; gap:12px; font-size:20px; }
+.custom-review dl { display:grid; grid-template-columns:minmax(130px,1fr) minmax(0,3fr); gap:10px 18px; line-height:1.6; }
+.custom-review dt { color:#a8c7b0; }.custom-review dd { margin:0; overflow-wrap:anywhere; white-space:pre-wrap; }
+.custom-review-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:20px; }
+.custom-data-row { display:grid; grid-template-columns:1.5fr 1.5fr 1fr auto; align-items:end; gap:12px; margin:18px 0; }
+.custom-data-row label { display:flex; flex-direction:column; gap:8px; margin:0; min-width:0; }.custom-data-row input { width:100%; min-width:0; }
+.custom-csv-input { margin-top:24px; border-top:1px solid #395440; padding-top:18px; }
+.custom-csv-input>label { display:block; }.custom-csv-input input[type=file] { width:100%; min-width:0; padding:12px; }
+.custom-csv-input input::file-selector-button { background:#254e36; color:#e3f5e8; border:1px solid #51765c; border-radius:6px; padding:8px; margin-right:10px; }
+.custom-data-table { overflow:auto; max-height:260px; margin:18px 0; }.custom-data-table table { min-width:0; width:100%; table-layout:fixed; }.custom-data-table td { white-space:pre-wrap; overflow-wrap:anywhere; }
+#customInputFeedback { border-left:3px solid #d5ac70; padding:12px; color:#ead5b3; }
+#customCsvStatus { overflow-wrap:anywhere; }.custom-own-data code { overflow-wrap:anywhere; }
+.top3-heading h2 { animation:top3-title-in .35s ease-out both; }.top3-molecule-stage { height:285px; }
+@keyframes top3-title-in { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+@media(max-width:700px) { .custom-own-data,.custom-review { padding:17px; }.custom-data-row { grid-template-columns:minmax(0,1fr) minmax(0,1fr); border-top:1px solid #395440; padding-top:16px; }.custom-review dl { grid-template-columns:minmax(0,1fr); gap:4px; }.custom-review dd { margin-bottom:10px; }.custom-review-actions .button { width:100%; }.top3-molecule-stage { height:280px; } }
+@media(prefers-reduced-motion:reduce) { .top3-heading h2 { animation:none; } }
+
+.custom-virus-info .custom-virus-fields { grid-template-columns:2fr 1fr 1fr; }
+.custom-review h3 { font-size:16px; }.custom-review { padding:18px; }
+#customCompatibility { padding:16px 20px; }#customCompatibility h3 { font-size:15px; margin:8px 0; }#customCompatibility p { font-size:12px; }
+.custom-virus-properties>.custom-own-data { margin:20px 0; }.custom-virus-properties .checkbox-label { margin-top:20px; }
+.reference-target-switcher { display:grid; grid-template-columns:auto minmax(200px,1fr); align-items:center; gap:12px 20px; padding:20px; margin:22px 0; }
+.reference-target-switcher label { margin:0; font-weight:600; }.reference-target-switcher p { grid-column:1/-1; margin:0; color:#aac4b0; font-size:12px; line-height:1.6; }
+.top3-target-filter { display:flex; align-items:center; gap:14px; margin:15px 0 20px; }.top3-target-filter select { flex:1; }
+@media(max-width:700px) { .custom-virus-info .custom-virus-fields { grid-template-columns:minmax(0,1fr); }.reference-target-switcher { grid-template-columns:minmax(0,1fr); }.top3-target-filter { flex-direction:column; align-items:stretch; } }

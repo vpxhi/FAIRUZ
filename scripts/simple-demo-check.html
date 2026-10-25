@@ -1,0 +1,74 @@
+<!doctype html><meta charset="utf-8"><title>Simple demo checks</title><pre id="result">RUNNING</pre><iframe id="app" src="../dist/index.html" style="width:1200px;height:1100px;border:0"></iframe><script type="module">
+import {validateConfiguration,assessCompatibility,referenceTargets,DRAFT_KEY} from '../dist/custom-virus.mjs';
+import {parseConfigurationCsv,CSV_TEMPLATE} from '../dist/custom-data.mjs';
+import {predictForest,rankCandidates} from '../dist/inference.mjs';
+const output=document.querySelector('#result'),checks=[];
+function assert(test,message){if(!test)throw new Error(message);checks.push(message);}
+async function waitFor(fn){for(let i=0;i<2000;i++){if(fn())return;await new Promise(r=>setTimeout(r,25));}throw new Error('Timed out waiting for demo');}
+try{
+ const study=await fetch('../dist/research-data.json').then(r=>r.json()),fixtures=await fetch('../data/validation-fixtures.json').then(r=>r.json()),expected={};
+ assert(validateConfiguration({virusName:'Example',genomeType:'RNA',envelope:'enveloped'}).targetProtein==='','Validation no longer requires a target protein');
+ assert(referenceTargets(study).length===3&&referenceTargets({models:{}}).length===0,'Supported reference targets are discovered from existing metadata');
+ assert(!assessCompatibility({virusName:'Example',genomeType:'RNA',envelope:'enveloped'},study).supported,'Reference demonstration does not imply genuine custom-virus support');
+ assert(parseConfigurationCsv(CSV_TEMPLATE).patch.genomeType==='RNA','CSV template still works without protein selection');
+ for(const text of ['virus_name,virus_name\na,b','target_protein\nUnknown','virus_name\n"unclosed','virus_type\ninvalid']){let rejected=false;try{parseConfigurationCsv(text);}catch{rejected=true;}assert(rejected,'Invalid or obsolete CSV input is rejected');}
+ for(const {key} of referenceTargets(study)){
+  const model=await fetch('../dist/models/'+key+'.json').then(r=>r.json());expected[key]=rankCandidates(model,study.library,study.trainingReferences);
+  for(const fixture of fixtures[key]){const c=study.library.find(c=>c.id===fixture.id),p=predictForest(model,c.features);assert(Math.abs(p.mean-fixture.mean)<1e-6&&Math.abs(p.sd-fixture.sd)<1e-6,'Original '+key+' prediction parity: '+fixture.id);}
+ }
+ const frame=document.querySelector('#app');let doc,win;const q=s=>doc.querySelector(s),all=s=>[...doc.querySelectorAll(s)];
+ async function ready(){await waitFor(()=>frame.contentDocument?.querySelector('#runButton')?.disabled===false);doc=frame.contentDocument;win=frame.contentWindow;}
+ await ready();const errors=[];win.addEventListener('error',e=>errors.push(e.message));
+ assert(!q('#customTargetProtein')&&!q('select#virus')&&!q('label[for="virus"]'),'Target Protein and Screening Type selections are removed');
+ assert(q('#virus').type==='hidden'&&q('#virus').value==='custom','Internal default screening state is preserved');
+ assert(all('.custom-virus-info input,.custom-virus-info select').length===3,'Only virus name, type and structure are visible essentials');
+ assert(!q('.custom-virus-properties').open&&q('.custom-virus-properties summary').textContent.includes('Advanced Settings'),'Optional data and scientific fields are hidden under Advanced Settings');
+ assert(!q('#reviewConfiguration')&&!q('#autoSummary').checked,'No review gate or automatic neural-model download delays the demo');
+ assert(q('#runButton').textContent.includes('Start AI Screening'),'Single primary action is Start AI Screening');
+ assert(!q('#top3Results').open&&q('#viewTop3').disabled,'No fabricated startup results are shown');
+ function fill(selector,value){q(selector).value=value;q(selector).dispatchEvent(new win.Event('input',{bubbles:true}));}
+ q('#resetCustomConfiguration').click();fill('#targetDemoName','');q('#screenForm').requestSubmit();assert(!q('#targetDemoName').checkValidity(),'Missing name is validated before screening');
+ fill('#targetDemoName','Hackathon virus');fill('#customGenome','RNA');fill('#customEnvelope','enveloped');
+ assert(JSON.parse(win.localStorage.getItem(DRAFT_KEY)).virusName==='Hackathon virus','Simple inputs are retained locally');
+ q('#screenForm').requestSubmit();assert(!q('#progress').hidden&&q('#targetDemoName').disabled&&q('#targetDemoName').value==='Hackathon virus','One click starts progress and retains configuration during screening');
+ await waitFor(()=>q('#top3Results').open&&q('#activeReferenceTarget').options.length===3&&!q('#runButton').disabled);
+ assert(q('#customCompatibility').textContent.includes('3 reference targets screened'),'All three existing reference targets complete automatically');
+ assert(q('#top3ReferenceTarget').options.length===3&&q('#activeReferenceTarget').value==='sars','Popup and workspace offer the same separate target views');
+ assert(q('#top3Heading').textContent.includes('Hackathon virus')&&q('.top3-explanation').textContent.includes('session label'),'Popup personalises the demo while explaining its reference scope');
+ const keys=['sars','flu','hcv'];
+ for(const key of keys){q('#top3ReferenceTarget').value=key;q('#top3ReferenceTarget').dispatchEvent(new win.Event('change'));assert(q('#activeReferenceTarget').value===key&&all('.top3-card').every((card,i)=>card.dataset.compoundId===expected[key][i].id&&card.querySelector('.top3-score strong').textContent===expected[key][i].prediction.toFixed(3)),'Popup displays the correct target-specific Top 3: '+key);}
+ q('#top3ReferenceTarget').value='sars';q('#top3ReferenceTarget').dispatchEvent(new win.Event('change'));
+ await waitFor(()=>all('.top3-molecule').every(n=>n.dataset.state==='ready'||n.dataset.state==='error'));
+ assert(all('.top3-molecule').length===3&&all('.top3-molecule').every(n=>n.dataset.state==='ready'),'All three exact molecular structures render');
+ for(const card of all('.top3-card')){const host=card.querySelector('.top3-canvas'),viewer=host.querySelector('canvas')._3dmol_viewer;if(card.querySelector('[data-camera=spin]').getAttribute('aria-pressed')==='true')card.querySelector('[data-camera=spin]').click();card.querySelector('[data-camera=reset]').click();const baseline=JSON.stringify(viewer.getView());host.dispatchEvent(new win.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assert(JSON.stringify(viewer.getView())!==baseline,'3D rotation: '+card.dataset.compoundId);card.querySelector('[data-camera=reset]').click();assert(JSON.stringify(viewer.getView())===baseline,'3D reset: '+card.dataset.compoundId);card.querySelector('[data-camera=in]').click();assert(JSON.stringify(viewer.getView())!==baseline,'3D zoom: '+card.dataset.compoundId);card.querySelector('[data-camera=reset]').click();}
+ q('.top3-details').click();assert(q('#detail').open&&q('#detailContent .smiles').textContent===expected.sars[0].smiles,'Full details opens the exact active target compound');await waitFor(()=>q('.molecule-panel')?.dataset.state==='ready');assert(q('.molecule-panel').dataset.state==='ready','Full-detail 3D viewer still works');q('#detail .close').click();
+ let blob;const originalCreate=win.URL.createObjectURL;win.URL.createObjectURL=b=>{blob=b;return originalCreate.call(win.URL,b);};async function exported(selector){blob=null;q(selector).click();await waitFor(()=>blob);return blob.text();}
+ const sessionId=q('#runStrip').textContent;const beforeHistory=JSON.parse(win.localStorage.getItem('fairouz-v2-audit')).length;
+ for(const key of keys){
+  q('#activeReferenceTarget').value=key;q('#activeReferenceTarget').dispatchEvent(new win.Event('change'));
+  assert(!q('#top3Results').open,'Target switching does not trigger another automatic reveal: '+key);
+  const report=JSON.parse(await exported('#export'));
+  assert(report.run.key===key&&report.run.configuration.virusName==='Hackathon virus'&&report.run.virus===study.models[key].virus&&report.run.customVirusInference===false&&report.run.mode==='synthetic-reference-batch','Export identifies user label and original reference model: '+key);
+  assert(report.results.length===360&&report.results.every((c,i)=>c.id===expected[key][i].id&&c.prediction===expected[key][i].prediction&&c.treeSd===expected[key][i].treeSd),'All predictions and ranks are unchanged for '+key);
+  q('nav [data-view=statistics]').click();await waitFor(()=>q('#statisticsCount').textContent==='360'&&all('.statistics-chart-status').every(n=>n.hidden));
+  assert(q('#statisticsHeading').textContent.includes('Hackathon virus')&&q('#statisticsRun').textContent.includes(study.models[key].target)&&q('#statisticsHighest').textContent===expected[key][0].prediction.toFixed(3),'Statistics shows the correct selected target: '+key);
+  const chart=win.Chart.getChart(q('#statisticsChart-activity'));assert(chart.data.datasets[0].data[0]===expected[key][0].prediction,'Chart data stays target-specific: '+key);
+ }
+ assert(JSON.parse(win.localStorage.getItem('fairouz-v2-audit')).length===beforeHistory,'Changing targets does not duplicate screening history');
+ q('nav [data-view=library]').click();assert(q('#workspaceTitle').textContent.includes('Hackathon virus'),'Results title uses session name');
+ q('#compoundRows [data-save]').click();q('nav [data-view=shortlist]').click();assert(q('#compoundRows [data-detail]')&&q('#resultCount').textContent==='1','Saved compounds still use the active target results');q('#compoundRows [data-save]').click();
+ q('nav [data-view=assistant]').click();let supplied;const NativeWorker=win.Worker;win.Worker=class {constructor(url,options){if(!String(url).includes('ai-worker'))return new NativeWorker(url,options);}postMessage(payload){supplied=payload.facts;setTimeout(()=>this.onmessage?.({data:{id:payload.id,type:'result',text:payload.facts.find(f=>f.id==='SESSION').text,model:'evidence-test-stub'}}),0);}terminate(){}};
+ fill('#chatInput','Explain this screening');q('#chatForm').requestSubmit();await waitFor(()=>supplied&&!q('#chatSend').disabled);assert(supplied.some(f=>f.id==='SESSION'&&f.text.includes('Hackathon virus')&&f.text.includes(study.models.hcv.target)&&f.text.includes('not evidence of activity')),'Assistant receives current target and truthful demo scope');
+ q('nav [data-view=overview]').click();q('#viewTop3').click();assert(q('#top3ReferenceTarget').value==='hcv'&&q('.top3-card').dataset.compoundId===expected.hcv[0].id,'Manual reveal reopens the current target');q('#top3Explore').click();assert(!q('#top3Results').open&&q('nav .active').dataset.view==='library','Explore All Results opens the active target results');
+ const csv=await exported('#exportCsv');assert(csv.includes(study.models.hcv.id)&&csv.split('\r\n').length===361,'CSV export remains available with the active model');
+ q('nav [data-view=overview]').click();fill('#targetDemoName','Second demo');fill('#library','focused');q('#screenForm').requestSubmit();await waitFor(()=>q('#top3Results').open&&!q('#runButton').disabled&&q('#resultCount').textContent==='60');assert(q('#top3Heading').textContent.includes('Second demo')&&q('#activeReferenceTarget').options.length===3&&q('#runStrip').textContent!==sessionId,'A new click creates a fresh three-target session and automatic reveal');q('#top3Results [data-top3-close]').click();
+ frame.style.width='390px';await new Promise(r=>setTimeout(r,80));assert(doc.documentElement.scrollWidth<=doc.documentElement.clientWidth+1,'Simplified setup fits mobile viewport');
+ q('.custom-virus-properties').open=true;q('#customOwnData').open=true;assert(q('.custom-virus-properties').contains(q('#customCsvFile'))&&q('.custom-virus-properties').contains(q('#customReview')),'CSV and preview remain available only in Advanced Settings');
+ frame.style.width='1200px';frame.src='../dist/index.html?partial-demo-test';await new Promise(r=>frame.addEventListener('load',r,{once:true}));await ready();
+ const nativeFetch=win.fetch.bind(win);win.fetch=(url,...args)=>String(url).includes('models/flu.json')?Promise.resolve(new win.Response('',{status:503})):nativeFetch(url,...args);
+ q('#screenForm').requestSubmit();await waitFor(()=>q('#top3Results').open&&!q('#runButton').disabled);assert(q('#activeReferenceTarget').options.length===2&&!all('#activeReferenceTarget option').some(o=>o.value==='flu')&&!q('#loadError').hidden,'Failed target is reported and excluded while successful targets remain usable');q('#top3Results [data-top3-close]').click();
+ frame.src='../dist/index.html?failed-demo-test';await new Promise(r=>frame.addEventListener('load',r,{once:true}));await ready();const failFetch=win.fetch.bind(win);win.fetch=(url,...args)=>String(url).includes('models/')?Promise.resolve(new win.Response('',{status:503})):failFetch(url,...args);
+ q('#screenForm').requestSubmit();await waitFor(()=>q('#customCompatibility').textContent.includes('No reference targets could be screened')&&!q('#runButton').disabled);assert(!q('#top3Results').open&&q('#viewTop3').disabled&&q('#resultCount').textContent==='0'&&q('#export').disabled,'No fabricated or stale results are created when all targets fail');
+ assert(errors.length===0,'No captured browser errors');output.textContent='PASS '+checks.length+' checks\n'+checks.join('\n');document.title='PASS Simple demo checks';
+}catch(error){output.textContent='FAIL '+error.stack+'\nPassed checks:\n'+checks.join('\n');document.title='FAIL Simple demo checks';}
+</script>
